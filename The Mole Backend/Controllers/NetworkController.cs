@@ -11,13 +11,15 @@ namespace The_Mole_Backend.Controllers
     public class NetworkController : ApiController
     {
         // GET: api/Network
-        public IEnumerable<int> Get100Paths()
+        public IEnumerable<List<string>> Get100Paths()
         {
+            //MainAlgorithm mainAlgorithm = new MainAlgorithm("united states", "portugal");
             MainAlgorithm mainAlgorithm = new MainAlgorithm();
             List<List<string>> literalPaths = new List<List<string>>();
             List<int> pathsCount = new List<int>();
             pathsCount = mainAlgorithm.GetPathFor100(ref literalPaths);
-            return pathsCount;
+            
+            return literalPaths;
         }
 
         //// GET: api/Network/5
