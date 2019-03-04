@@ -17,7 +17,7 @@ namespace The_Mole_Backend.Controllers
             MainAlgorithm mainAlgorithm = new MainAlgorithm();
             List<List<string>> literalPaths = new List<List<string>>();
             List<int> pathsCount = new List<int>();
-            pathsCount = mainAlgorithm.GetPathFor100(ref literalPaths);
+            pathsCount = mainAlgorithm.GetPathsSimple(ref literalPaths);
             
             return literalPaths;
         }

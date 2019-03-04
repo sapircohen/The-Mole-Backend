@@ -34,15 +34,15 @@ namespace The_Mole_Backend.Models
             //use graph.AddVertex('SOMESTRING') in a foreach loop
             //use  graph.AddEdge('A', 'B',0);
         }
-        public List<int> GetPathsSimple(ref List<List<string>> Paths)
+        public List<int> GetPathsAdvancedIntersect(ref List<List<string>> Paths)
         {
             List<string> vertecies = new List<string>();
             List<List<string>> edges = new List<List<string>>();
 
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies("ConnectionStringTheMole", "Vertecies");
-            edges = db.GetEdges("ConnectionStringTheMole", "Edges");
+            vertecies = db.GetVertecies("ConnectionStringTheMole", "MoviesVertecies");
+            edges = db.GetEdges("ConnectionStringTheMole", "MoviesEdges");
 
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
@@ -97,15 +97,15 @@ namespace The_Mole_Backend.Models
         }
 
 
-        public List<int> GetPathsAdvanced(ref List<List<string>> Paths)
+        public List<int> GetPathsSimple(ref List<List<string>> Paths)
         {
             List<string> vertecies = new List<string>();
             List<List<string>> edges = new List<List<string>>();
 
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies("ConnectionStringTheMole", "Vertecies");
-            edges = db.GetEdges("ConnectionStringTheMole", "Edges");
+            vertecies = db.GetVertecies("ConnectionStringTheMole", "MoviesVertecies");
+            edges = db.GetEdges("ConnectionStringTheMole", "MoviesEdges");
 
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
