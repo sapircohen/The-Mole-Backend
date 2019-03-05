@@ -104,8 +104,8 @@ namespace The_Mole_Backend.Models
 
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies("ConnectionStringTheMole", "MoviesVertecies");
-            edges = db.GetEdges("ConnectionStringTheMole", "MoviesEdges");
+            vertecies = db.GetVertecies("ConnectionStringTheMole", "PoliticiansVertecies");
+            edges = db.GetEdges("ConnectionStringTheMole", "PoliticiansEdges");
 
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
@@ -119,7 +119,7 @@ namespace The_Mole_Backend.Models
             {
                 graph.AddEdge(edge[0], edge[1], 1);
             }
-           
+
             //4. create dijkstra algorithm
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
@@ -131,18 +131,25 @@ namespace The_Mole_Backend.Models
 
             //5.run the algoritm for 110 random vertecies.
             for (int i = 0; i < 200; i++)
+            {
+                int sourceVertex = random.Next(0, vertecies.Count);
+                int targetVertex = random.Next(0, vertecies.Count);
+                //if source and target pages are the same DON'T run the algorithm
+                if (sourceVertex != targetVertex)
                 {
-                    int sourceVertex = random.Next(0, vertecies.Count);
-                    int targetVertex = random.Next(0, vertecies.Count);
-                    //if source and target pages are the same DON'T run the algorithm
-                    if (sourceVertex != targetVertex)
+                    List<string> pathsTwo = new List<string>();
+                    var result = algorithm.FindShortestPath(graph, vertecies[sourceVertex], vertecies[targetVertex]);
+                    pathsCount.Add(result.Path.Count);
+                    if (result.Path.Count == 1)
                     {
-                        var result = algorithm.FindShortestPath(graph, vertecies[sourceVertex], vertecies[targetVertex]);
-                        pathsCount.Add(result.Path.Count);
-                        Paths.Add(result.Path);
-
+                        pathsTwo.Add(vertecies[sourceVertex]);
+                        pathsTwo.Add(vertecies[targetVertex]);
+                        Paths.Add(pathsTwo);
                     }
+                    else Paths.Add(result.Path);
+
                 }
+            }
 
             return pathsCount;
         }
