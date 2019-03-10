@@ -24,7 +24,7 @@ namespace The_Mole_Backend.Models
         public List<string> GetPaths()
         {
             var options = new ChromeOptions();
-            options.AddArguments("--disable-gpu");
+            options.AddArguments("headless");
             var chromeDriver = new ChromeDriver(options);
             chromeDriver.Navigate().GoToUrl(url);
             chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/button").Click();
