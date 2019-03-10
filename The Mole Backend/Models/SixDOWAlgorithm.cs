@@ -21,12 +21,12 @@ namespace The_Mole_Backend.Models
         public string Source { get; set; }
         public string Target { get; set; }
 
-        public string[] GetPaths()
+        public List<string> GetPaths()
         {
             var options = new ChromeOptions();
             options.AddArguments("--disable-gpu");
             var chromeDriver = new ChromeDriver(options);
-            chromeDriver.Navigate().GoToUrl(firstUrl + endUrl);
+            chromeDriver.Navigate().GoToUrl(url);
             chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/button").Click();
 
             chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
@@ -38,8 +38,14 @@ namespace The_Mole_Backend.Models
             );
 
             chromeDriver.Close();
+            int index = Array.IndexOf(paths, Target);
+            List<string> newPath = new List<string>();
+            for (int i = 0; i <= index; i++)
+            {
+                newPath.Add(paths[i]);
+            }
 
-            return paths;
+            return newPath;
         }
         public void PrintPaths(string[] paths)
         {

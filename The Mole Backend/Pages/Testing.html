@@ -10,14 +10,19 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
         $(document).ready(function () {
-            ajaxCall("Get", "../api/network", "", success, error);
+            //ajaxCall("Get", "../api/network", "", success, error);
+            var source = 'Benjamin Netanyahu';
+            var target = 'Australasian gannet';
+            ajaxCall("Get", "../api/SIXDOW?source="+source+"&target="+target+"", "", success, error);
         });
-
         function success(data) {
-            for (var i = 0; i < data.length; i++) {
-                console.log(data[i]);
-            }
+            console.log(data)
         }
+        //function success(data) {
+        //    for (var i = 0; i < data.length; i++) {
+        //        console.log(data[i]);
+        //    }
+        //}
         function error(error) {
             console.log(error);
         }
