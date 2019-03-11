@@ -260,3 +260,4 @@ paket-files/
 __pycache__/
 *.pyc
 *.config
+The Mole Backend/Web.config
