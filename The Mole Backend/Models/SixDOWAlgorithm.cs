@@ -1,4 +1,5 @@
 ﻿using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,21 +24,27 @@ namespace The_Mole_Backend.Models
 
         public List<string> GetPaths()
         {
-            var options = new ChromeOptions();
-            options.AddArguments("headless");
-            var chromeDriver = new ChromeDriver(options);
+           // var options = new ChromeOptions();
+            //options.AddArguments("headless");
+            ChromeOptions chromeOptions = new ChromeOptions();
+
+            chromeOptions.AddArguments("disable-gpu");
+            chromeOptions.AddArguments("no-sandbox");
+            chromeOptions.AddArguments("headless");
+
+            ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
             chromeDriver.Navigate().GoToUrl(url);
             chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/button").Click();
 
             chromeDriver.Manage().Timeouts().ImplicitWait = TimeSpan.FromSeconds(10);
-            //need to wait until for this element to show up.
+            //need to wait for this element to show up.
             string text = chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/div[5]").Text;
             string[] paths = text.Split(
                 new[] { "\r\n", "\r", "\n" },
                 StringSplitOptions.None
             );
 
-            chromeDriver.Close();
+           // chromeDriver.Close();
             int index = Array.IndexOf(paths, Target);
             List<string> newPath = new List<string>();
             for (int i = 0; i <= index; i++)

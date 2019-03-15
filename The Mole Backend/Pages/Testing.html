@@ -10,15 +10,32 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
         $(document).ready(function () {
-            //ajaxCall("Get", "../api/network", "", success, error);
-            var source = 'Benjamin Netanyahu';
-            var target = 'Australasian gannet';
-            ajaxCall("Get", "../api/SIXDOW?source="+source+"&target="+target+"", "", success, error);
+            //randomVertecies();
+            //Path();
+            //randomPaths();
+            webScrape();
         });
+        function Path() {
+            var source = "Curly Armstrong";
+            var target = "Bob Hill";
+            ajaxCall("Get", "../api/network?source="+source+"&target="+target+"&categoryName=NBA", "", success, error);
+        }
+        function randomVertecies() {
+            ajaxCall("Get", "../api/network?categoryName=NBA", "", success, error);
+        }
+        function randomPaths() {
+            ajaxCall("Get", "../api/network", "", successRandomPaths, error);
+        }
         function success(data) {
             console.log(data)
         }
-        //function success(data) {
+        function webScrape() {
+            var source = 'Benjamin Netanyahu';
+            var target = 'Australasian gannet';
+            ajaxCall("Get", "../api/SIXDOW?source=" + source + "&target=" + target + "", "", success, error);
+
+        }
+        //function successRandomPaths(data) {
         //    for (var i = 0; i < data.length; i++) {
         //        console.log(data[i]);
         //    }

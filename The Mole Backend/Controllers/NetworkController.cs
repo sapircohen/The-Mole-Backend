@@ -14,13 +14,56 @@ namespace The_Mole_Backend.Controllers
         // GET: api/Network
         public IEnumerable<List<string>> Get100Paths()
         {
-            MainAlgorithm mainAlgorithm = new MainAlgorithm();
-            List<List<string>> literalPaths = new List<List<string>>();
-            List<int> pathsCount = new List<int>();
-            pathsCount = mainAlgorithm.GetPathsSimple(ref literalPaths);
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<List<string>> literalPaths = new List<List<string>>();
+                List<int> pathsCount = new List<int>();
+                pathsCount = mainAlgorithm.GetPathsSimple(ref literalPaths);
+
+                return literalPaths;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception("problem with get100paths, the error: " + ex);
+            }
             
-            return literalPaths;
         }
+        // GET: api/Network
+        public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<List<string>> TwoPaths = new List<List<string>>();
+                TwoPaths = mainAlgorithm.GetPath(source, target, categoryName);
+
+                return TwoPaths;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with GetTwoPaths, the error: " + ex);
+            }
+        }
+
+        public string[] GetRandomVertecies(string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                string[] randomVertecies = new string[6];
+                randomVertecies = mainAlgorithm.GetRandomVertecies(categoryName);
+
+                return randomVertecies;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with GetRandomVertecies, the error: " + ex);
+            }
+        }
+
 
     }
 }

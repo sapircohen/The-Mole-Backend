@@ -24,16 +24,11 @@ namespace The_Mole_Backend.Models
 
         }
 
-
-        //this function will be called 1 time only. 
-        public void GetGraph(List<string> vertecies, List<string[]> edges)
-        {
-            //get all vertecies and edges from DBservices
-            //DBserviecs db = new DBservices;
-            //db.GetEdgesAndVertecies(vertecies,edges)
-            //use graph.AddVertex('SOMESTRING') in a foreach loop
-            //use  graph.AddEdge('A', 'B',0);
-        }
+        /// <summary>
+        /// getting rendom paths of only two-direction vertecies for testing
+        /// </summary>
+        /// <param name="Paths">empty list of paths to fill</param>
+        /// <returns></returns>
         public List<int> GetPathsAdvancedIntersect(ref List<List<string>> Paths)
         {
             List<string> vertecies = new List<string>();
@@ -96,7 +91,11 @@ namespace The_Mole_Backend.Models
             return pathsCount;
         }
 
-
+        /// <summary>
+        ///getting a list of random paths for testing
+        /// </summary>
+        /// <param name="Paths">empty list of paths to fill</param>
+        /// <returns></returns>
         public List<int> GetPathsSimple(ref List<List<string>> Paths)
         {
             List<string> vertecies = new List<string>();
@@ -154,7 +153,154 @@ namespace The_Mole_Backend.Models
             return pathsCount;
         }
 
+        /// <summary>
+        /// getting the path from a source vertex to a target vertex
+        /// </summary>
+        /// <param name="source">inital vertex to start from</param>
+        /// <param name="traget"> target vertex</param>
+        /// <param name="categoryName">choose from: NBA,Politicans,GeneralKnowledge,Movies,Music,Celeb</param>
+        /// <returns></returns>
+        public List<List<string>> GetPath(string source, string target,string categoryName)
+        {
+            List<List<string>> TwoPaths = new List<List<string>>();
+            string edgeCategoryName = "";
+            string verteciesCategoryName = "";
+            switch (categoryName)
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    verteciesCategoryName = "NBAVertecies";
+                    break;
+                case "GeneralKnowledge":
+                    edgeCategoryName = "GeneralEdges";
+                    verteciesCategoryName = "GeneralVertecies";
+                    break;
+                case "Movies":
+                    edgeCategoryName = "MoviesEdges";
+                    verteciesCategoryName = "MoviesVertecies";
+                    break;
+                case "Music":
+                    edgeCategoryName = "MusicEdges";
+                    verteciesCategoryName = "MusicVertecies";
+                    break;
+                case "Celeb":
+                    edgeCategoryName = "CelebEdges";
+                    verteciesCategoryName = "CelebVertecies";
+                    break;
+                default:
+                    break;
+            }
+            List<string> path = new List<string>();
+            //get all vertecies and edges from db
+            DBservices db = new DBservices();
+            //get edges and vertecies for the given category
+            List<string> vertecies = this.GetVerteciesForCategory("ConnectionStringTheMole", verteciesCategoryName);
+            List<List<string>> edges = this.GetEdgesForCategory("ConnectionStringTheMole", edgeCategoryName);
+            //create a graph 
+            var graph = new WeightedDiGraph<string, int>();
+            //insert vertecies to the graph
+            foreach (string vertex in vertecies)
+            {
+                graph.AddVertex(vertex);
+            }
+            //insert edges to the graph
+            foreach (var edge in edges)
+            {
+                graph.AddEdge(edge[0], edge[1], 1);
+            }
+            //create dijkstra algorithm
+            var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
+
+           
+             var result = algorithm.FindShortestPath(graph,source,target);
+                TwoPaths.Add(result.Path);
+
+            return TwoPaths;
+        }
+
+        /// <summary>
+        /// get random six vertecies from a given category
+        /// </summary>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public string[] GetRandomVertecies(string categoryName)
+        {
+            
+            string[] sixVertecies = new string[6];
+            string verteciesCategoryName = "";
+            switch (categoryName)
+            {
+                case "NBA":
+                    verteciesCategoryName = "NBAVertecies";
+                    break;
+                case "GeneralKnowledge":
+                    verteciesCategoryName = "GeneralVertecies";
+                    break;
+                case "Movies":
+                    verteciesCategoryName = "MoviesVertecies";
+                    break;
+                case "Music":
+                    verteciesCategoryName = "MusicVertecies";
+                    break;
+                case "Celeb":
+                    verteciesCategoryName = "CelebVertecies";
+                    break;
+                default:
+                    break;
+            }
+            //get all vertecies and edges from db
+            DBservices db = new DBservices();
+            //get vertecies for the given category
+            List<string> vertecies = this.GetVerteciesForCategory("ConnectionStringTheMole", verteciesCategoryName);
+            //get six  random articles from vertecies list in a category
+            for (int i = 0; i < 6; i++)
+            {
+                int randomVertex = random.Next(0, vertecies.Count);
+                sixVertecies[i] = vertecies[randomVertex];
+            }
+
+            return sixVertecies;
+        }
+
+
+        /// <summary>
+        /// //get vertecies from DB for a category
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public List<string> GetVerteciesForCategory(string connectionString,string categoryName)
+        {
+            List<string> vertecies = new List<string>();
+            DBservices db = new DBservices();
+            vertecies = db.GetVertecies(connectionString, categoryName);
+
+
+            return vertecies;
+        }
+
+        /// <summary>
+        /// get edges from DB for a category
+        /// </summary>
+        /// <param name="connectionString"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public List<List<string>> GetEdgesForCategory(string connectionString,string categoryName)
+        {
+
+            List<List<string>> edges = new List<List<string>>();
+            DBservices db = new DBservices();
+            edges = db.GetEdges(connectionString, categoryName);
+
+
+            return edges;
+        }
+
+
     }
+
+    
+
     //healper for the algorithm
     public class DijikstraShortestPathOperators : IShortestPathOperators<int>
     {
