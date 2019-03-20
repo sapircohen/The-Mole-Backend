@@ -2,7 +2,9 @@
 using OpenQA.Selenium.Remote;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
 
 namespace The_Mole_Backend.Models
@@ -31,8 +33,10 @@ namespace The_Mole_Backend.Models
             chromeOptions.AddArguments("disable-gpu");
             chromeOptions.AddArguments("no-sandbox");
             chromeOptions.AddArguments("headless");
+            
+            string root_path = HttpRuntime.AppDomainAppPath;
 
-            ChromeDriver chromeDriver = new ChromeDriver(chromeOptions);
+            ChromeDriver chromeDriver = new ChromeDriver(root_path+@"\Drivers", chromeOptions);
             chromeDriver.Navigate().GoToUrl(url);
             chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/button").Click();
 

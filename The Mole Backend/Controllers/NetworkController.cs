@@ -29,7 +29,7 @@ namespace The_Mole_Backend.Controllers
             }
             
         }
-        // GET: api/Network
+
         public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
         {
             try

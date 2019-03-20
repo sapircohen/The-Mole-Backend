@@ -13,7 +13,7 @@ namespace The_Mole_Backend.Models
         public string Source2 { get; set; }
         public string Target { get; set; }
         static Random random = new Random();
-
+        
         public MainAlgorithm(string source, string target)
         {
             Source = source;
@@ -165,25 +165,25 @@ namespace The_Mole_Backend.Models
             List<List<string>> TwoPaths = new List<List<string>>();
             string edgeCategoryName = "";
             string verteciesCategoryName = "";
-            switch (categoryName)
+            switch (categoryName.ToUpper())
             {
                 case "NBA":
                     edgeCategoryName = "NBAEdges";
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GeneralKnowledge":
+                case "GENERALKNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "Movies":
+                case "MOVIES":
                     edgeCategoryName = "MoviesEdges";
                     verteciesCategoryName = "MoviesVertecies";
                     break;
-                case "Music":
+                case "MUSIC":
                     edgeCategoryName = "MusicEdges";
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "Celeb":
+                case "CELEB":
                     edgeCategoryName = "CelebEdges";
                     verteciesCategoryName = "CelebVertecies";
                     break;
@@ -228,21 +228,21 @@ namespace The_Mole_Backend.Models
             
             string[] sixVertecies = new string[6];
             string verteciesCategoryName = "";
-            switch (categoryName)
+            switch (categoryName.ToUpper())
             {
                 case "NBA":
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GeneralKnowledge":
+                case "GENERALKNOWLEDGE":
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "Movies":
+                case "MOVIES":
                     verteciesCategoryName = "MoviesVertecies";
                     break;
-                case "Music":
+                case "MUSIC":
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "Celeb":
+                case "CELEB":
                     verteciesCategoryName = "CelebVertecies";
                     break;
                 default:
@@ -299,9 +299,7 @@ namespace The_Mole_Backend.Models
 
     }
 
-    
-
-    //healper for the algorithm
+    //helper for the algorithm
     public class DijikstraShortestPathOperators : IShortestPathOperators<int>
     {
         public int DefaultValue

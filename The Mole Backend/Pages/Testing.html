@@ -4,24 +4,21 @@
     <meta charset="utf-8" />
     <title>Network testing</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-    <script src="https://cdn.datatables.net/1.10.19/js/jquery.dataTables.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
         $(document).ready(function () {
             //randomVertecies();
-            //Path();
+            Path();
             //randomPaths();
-            webScrape();
+           webScrape();
         });
         function Path() {
             var source = "Curly Armstrong";
             var target = "Bob Hill";
-            ajaxCall("Get", "../api/network?source="+source+"&target="+target+"&categoryName=NBA", "", success, error);
+            ajaxCall("Get", "../api/network/?source="+source+"&target="+target+"&categoryName=NBA", "", success, error);
         }
         function randomVertecies() {
-            ajaxCall("Get", "../api/network?categoryName=NBA", "", success, error);
+            ajaxCall("Get", "../api/network/?categoryname=nba", "", success, error);
         }
         function randomPaths() {
             ajaxCall("Get", "../api/network", "", successRandomPaths, error);
@@ -32,7 +29,7 @@
         function webScrape() {
             var source = 'Benjamin Netanyahu';
             var target = 'Australasian gannet';
-            ajaxCall("Get", "../api/SIXDOW?source=" + source + "&target=" + target + "", "", success, error);
+            ajaxCall("Get", "../api/SIXDOW/?source=" + source + "&target=" + target + "", "", success, error);
 
         }
         //function successRandomPaths(data) {
@@ -46,6 +43,6 @@
     </script>
 </head>
 <body>
-
+    <h1>Hello Networks world</h1>
 </body>
 </html>
