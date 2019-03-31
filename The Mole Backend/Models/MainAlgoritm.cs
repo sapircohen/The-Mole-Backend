@@ -36,8 +36,8 @@ namespace The_Mole_Backend.Models
 
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies("ConnectionStringTheMole", "MoviesVertecies");
-            edges = db.GetEdges("ConnectionStringTheMole", "MoviesEdges");
+            vertecies = db.GetAllVertecies("TheMoleConnection", "MoviesVertecies");
+            edges = db.GetEdges("TheMoleConnection", "MoviesEdges");
 
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
@@ -103,8 +103,8 @@ namespace The_Mole_Backend.Models
 
             // get all vertecies and edges from DB
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies("ConnectionStringTheMole", "PoliticiansVertecies");
-            edges = db.GetEdges("ConnectionStringTheMole", "PoliticiansEdges");
+            vertecies = db.GetAllVertecies("TheMoleConnection", "PoliticiansVertecies");
+            edges = db.GetEdges("TheMoleConnection", "PoliticiansEdges");
 
             //1. create a graph
             var graph = new WeightedDiGraph<string, int>();
@@ -194,8 +194,8 @@ namespace The_Mole_Backend.Models
             //get all vertecies and edges from db
             DBservices db = new DBservices();
             //get edges and vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("ConnectionStringTheMole", verteciesCategoryName);
-            List<List<string>> edges = this.GetEdgesForCategory("ConnectionStringTheMole", edgeCategoryName);
+            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
+            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
             //create a graph 
             var graph = new WeightedDiGraph<string, int>();
             //insert vertecies to the graph
@@ -251,7 +251,7 @@ namespace The_Mole_Backend.Models
             //get all vertecies and edges from db
             DBservices db = new DBservices();
             //get vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("ConnectionStringTheMole", verteciesCategoryName);
+            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
             //get six  random articles from vertecies list in a category
             for (int i = 0; i < 6; i++)
             {
@@ -273,7 +273,7 @@ namespace The_Mole_Backend.Models
         {
             List<string> vertecies = new List<string>();
             DBservices db = new DBservices();
-            vertecies = db.GetVertecies(connectionString, categoryName);
+            vertecies = db.GetAllVertecies(connectionString, categoryName);
 
 
             return vertecies;

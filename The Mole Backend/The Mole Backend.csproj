@@ -197,16 +197,28 @@
     <Compile Include="Areas\HelpPage\SampleGeneration\SampleDirection.cs" />
     <Compile Include="Areas\HelpPage\SampleGeneration\TextSample.cs" />
     <Compile Include="Areas\HelpPage\XmlDocumentationProvider.cs" />
+    <Compile Include="Controllers\AdminController.cs" />
+    <Compile Include="Controllers\CategoryController.cs" />
+    <Compile Include="Controllers\GameController.cs" />
+    <Compile Include="Controllers\GameManagerController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\NetworkController.cs" />
+    <Compile Include="Controllers\PlayerController.cs" />
     <Compile Include="Controllers\SIXDOWController.cs" />
     <Compile Include="Controllers\ValuesController.cs" />
+    <Compile Include="Controllers\VerteciesIsInGameController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
+    <Compile Include="Models\Admin.cs" />
+    <Compile Include="Models\Category.cs" />
     <Compile Include="Models\DAL\DBservices.cs" />
+    <Compile Include="Models\Game.cs" />
+    <Compile Include="Models\GameManager.cs" />
     <Compile Include="Models\MainAlgoritm.cs" />
+    <Compile Include="Models\Player.cs" />
     <Compile Include="Models\SixDOWAlgorithm.cs" />
+    <Compile Include="Models\VerteciesIsInGame.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -215,12 +227,34 @@
     <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="css\sb-admin-2.css" />
+    <Content Include="css\sb-admin-2.min.css" />
     <Content Include="Drivers\chromedriver.exe">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
+    <Content Include="HTML\dashboard.html" />
+    <Content Include="HTML\forgot-password.html" />
+    <Content Include="HTML\Games-Teble.html" />
+    <Content Include="HTML\gulpfile.js" />
+    <Content Include="HTML\login.html" />
+    <Content Include="HTML\templates\404.html" />
+    <Content Include="HTML\templates\blank.html" />
+    <Content Include="HTML\templates\buttons.html" />
+    <Content Include="HTML\templates\cards.html" />
+    <Content Include="HTML\templates\charts.html" />
+    <Content Include="HTML\templates\tables.html" />
+    <Content Include="HTML\templates\utilities-animation.html" />
+    <Content Include="HTML\templates\utilities-border.html" />
+    <Content Include="HTML\templates\utilities-color.html" />
+    <Content Include="HTML\templates\utilities-other.html" />
+    <Content Include="HTML\Users-Teble.html" />
+    <Content Include="HTML\Vertecies in Games-Teble.html" />
+    <Content Include="img\logo33-03.jpg" />
+    <Content Include="img\TheMoleLogo.JPG" />
+    <Content Include="img\undraw_posting_photo.svg" />
     <Content Include="Pages\Testing.html" />
     <Content Include="Scripts\ajaxCalls.js" />
     <Content Include="Scripts\bootstrap.js" />
@@ -247,6 +281,11 @@
     <Content Include="ApplicationInsights.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
+    <Content Include="HTML\.travis.yml" />
+    <Content Include="HTML\LICENSE" />
+    <Content Include="HTML\package-lock.json" />
+    <Content Include="HTML\package.json" />
+    <Content Include="HTML\README.md" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />
@@ -270,6 +309,29 @@
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Shared\_Layout.cshtml" />
+    <Content Include="scss\sb-admin-2.scss" />
+    <Content Include="scss\_buttons.scss" />
+    <Content Include="scss\_cards.scss" />
+    <Content Include="scss\_charts.scss" />
+    <Content Include="scss\_dropdowns.scss" />
+    <Content Include="scss\_error.scss" />
+    <Content Include="scss\_footer.scss" />
+    <Content Include="scss\_global.scss" />
+    <Content Include="scss\_login.scss" />
+    <Content Include="scss\_mixins.scss" />
+    <Content Include="scss\_navs.scss" />
+    <Content Include="scss\_utilities.scss" />
+    <Content Include="scss\_variables.scss" />
+    <Content Include="scss\navs\_global.scss" />
+    <Content Include="scss\navs\_sidebar.scss" />
+    <Content Include="scss\navs\_topbar.scss" />
+    <Content Include="scss\utilities\_animation.scss" />
+    <Content Include="scss\utilities\_background.scss" />
+    <Content Include="scss\utilities\_border.scss" />
+    <Content Include="scss\utilities\_display.scss" />
+    <Content Include="scss\utilities\_progress.scss" />
+    <Content Include="scss\utilities\_rotate.scss" />
+    <Content Include="scss\utilities\_text.scss" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

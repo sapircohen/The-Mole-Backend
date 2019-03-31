@@ -7,10 +7,18 @@
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
         $(document).ready(function () {
+            let today = new Date().toISOString();
+            var p = {
+                Locale: "hey",
+                NickName: "Trying to push",
+                Email: "trying to push email",
+                ProfilePic: "some picture",
+            }
+            ajaxCall("POST", "../api/Player",JSON.stringify(p), success, error);
             //randomVertecies();
-            Path();
+            //Path();
             //randomPaths();
-           webScrape();
+           //webScrape();
         });
         function Path() {
             var source = "Curly Armstrong";
