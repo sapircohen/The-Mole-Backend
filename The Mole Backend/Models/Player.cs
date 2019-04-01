@@ -118,6 +118,14 @@ namespace AdminPage.Models
             int rowAffected = db.insertToken(token, uid);
             return rowAffected;
         }
+        //InsertLastLogin
+        public int InsertLastLogin(string uid)
+        {
+            DBservices db = new DBservices();
+
+            int rowAffected = db.insertLastLogin(uid);
+            return rowAffected;
+        }
         public List<Player> Read()
         {
             DBservices dbs = new DBservices();

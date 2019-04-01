@@ -62,7 +62,7 @@ namespace AdminPage.Controllers
             }
         }
 
-        //insert token player
+        //insert avatar player
         [HttpPost]
         [Route("api/player")]
         public void PostAvatar(string avatarUrl, string uid)
@@ -79,6 +79,22 @@ namespace AdminPage.Controllers
             }
         }
 
+        //insert avatar player
+        [HttpPost]
+        [Route("api/player")]
+        public void PostLastLogin(string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.InsertLastLogin(uid);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+            }
+        }
         // GET: api/Player/5
         public string Get(int id)
         {

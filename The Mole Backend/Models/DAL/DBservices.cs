@@ -253,6 +253,48 @@ public class DBservices
             }
         }
     }
+    public int insertLastLogin(string uid)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+        string format = "yyyy-MM-dd HH:mm:ss";
+        DateTime time = DateTime.Now;
+        try
+        {
+            con = connect("TheMoleConnection"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        String pStr = "update Player set LastLogin ='" + time.ToString(format) + "' where uid = '" + uid + "'";    // helper method to build the insert string
+
+        cmd = CreateCommand(pStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
     /// <summary>
     /// insert a new player
     /// </summary>
