@@ -45,6 +45,40 @@ namespace AdminPage.Controllers
             }
         }
 
+        //insert token player
+        [HttpPost]
+        [Route("api/player")]
+        public void Post(string token,string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.InsertToken(token, uid);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+            }
+        }
+
+        //insert token player
+        [HttpPost]
+        [Route("api/player")]
+        public void PostAvatar(string avatarUrl, string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.InsertAvatar(avatarUrl, uid);
+            }
+
+            catch (Exception ex)
+            {
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+            }
+        }
+
         // GET: api/Player/5
         public string Get(int id)
         {

@@ -173,7 +173,86 @@ public class DBservices
             }
         }
     }
+    public int insertToken(string token,string uid)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
 
+        try
+        {
+            con = connect("TheMoleConnection"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        String pStr = "update Player set NotificationToken ='"+token+"' where uid = '"+uid+"'";    // helper method to build the insert string
+
+        cmd = CreateCommand(pStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+    public int insertAvatar(string avatarUrl, string uid)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("TheMoleConnection"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        String pStr = "update Player set avatar_pic ='" + avatarUrl + "' where uid = '" + uid + "'";    // helper method to build the insert string
+
+        cmd = CreateCommand(pStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
     /// <summary>
     /// insert a new player
     /// </summary>
@@ -187,8 +266,8 @@ public class DBservices
         string format = "yyyy-MM-dd HH:mm:ss";
         DateTime time = DateTime.Now;
         // use a string builder to create the dynamic string
-        sb.AppendFormat("Values('{0}', '{1}','{2}','{3}','{4}')", player.Email, player.NickName, time.ToString(format),player.Locale,player.ProfilePic);
-        String prefix = "INSERT INTO Player " + "(UserEmail, UserNickname,CreatedAt,Locale,profile_pic) ";
+        sb.AppendFormat("Values('{0}', '{1}','{2}','{3}','{4}','{5}')", player.Email, player.NickName, time.ToString(format),player.Locale,player.ProfilePic,player.Uid);
+        String prefix = "INSERT INTO Player " + "(UserEmail, UserNickname,CreatedAt,Locale,profile_pic,uid) ";
         command = prefix + sb.ToString();
 
         return command;
