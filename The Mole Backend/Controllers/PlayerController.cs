@@ -22,13 +22,27 @@ namespace AdminPage.Controllers
                 playerList = p.Read();
                 return playerList;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw new Exception("בעיה בקריאת הנתונים מהמערכת");
+                throw new Exception("GET ALL players error: ",ex);
             }
         }
+        [HttpGet]
+        [Route("api/Player")]
+        public string GetToken(string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                return p.GetToken(uid);
+            }
+            catch (Exception ex)
+            {
 
+                throw new Exception("GetToken error: ",ex);
+            }
+        }
         //insert new player
         [HttpPost]
         [Route("api/player")]
@@ -58,7 +72,7 @@ namespace AdminPage.Controllers
 
             catch (Exception ex)
             {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+                throw new Exception("Post ");
             }
         }
 

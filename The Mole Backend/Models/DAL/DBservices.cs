@@ -494,4 +494,36 @@ public class DBservices
         }
     }
 
+    public string getToken(string uid)
+    {
+        SqlConnection con = null;
+        string token = "";
+        try
+        {
+            con = connect("TheMoleConnection");
+            String selectSTR = "SELECT NotificationToken FROM Player where uid='" + uid + "'";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection);
+            while (dr.Read())
+            {
+                token = dr["NotificationToken"].ToString();
+            }
+
+            return token;
+        }
+        catch (Exception ex)
+        {
+
+            throw ex;
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+       
+
+    }
 }

@@ -103,7 +103,12 @@ namespace AdminPage.Models
             int rowAffected = db.insert(this);
             return rowAffected;
         }
-
+        public string GetToken(string uid)
+        {
+            DBservices db = new DBservices();
+            string token = db.getToken(uid);
+            return token;
+        }
         public int InsertToken(string token,string uid)
         {
             DBservices db = new DBservices();
