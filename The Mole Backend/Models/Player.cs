@@ -13,6 +13,7 @@ namespace AdminPage.Models
         string lastLogin;
         string locale;
         string profilePic;
+        string avatarPic;
         int id;
         public int Id{
             get { return id; }

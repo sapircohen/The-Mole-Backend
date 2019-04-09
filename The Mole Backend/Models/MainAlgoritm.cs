@@ -211,9 +211,16 @@ namespace The_Mole_Backend.Models
             //create dijkstra algorithm
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
-           
-             var result = algorithm.FindShortestPath(graph,source,target);
-                TwoPaths.Add(result.Path);
+            List<string> pathsTwo = new List<string>();
+            var result = algorithm.FindShortestPath(graph,source,target);
+            if (result.Path.Count == 1)
+            {
+                pathsTwo.Add(source);
+                pathsTwo.Add(target);
+                TwoPaths.Add(pathsTwo);
+            }
+
+            else TwoPaths.Add(result.Path);
 
             return TwoPaths;
         }
@@ -225,7 +232,6 @@ namespace The_Mole_Backend.Models
         /// <returns></returns>
         public string[] GetRandomVertecies(string categoryName)
         {
-            
             string[] sixVertecies = new string[6];
             string verteciesCategoryName = "";
             switch (categoryName.ToUpper())
@@ -275,7 +281,6 @@ namespace The_Mole_Backend.Models
             DBservices db = new DBservices();
             vertecies = db.GetAllVertecies(connectionString, categoryName);
 
-
             return vertecies;
         }
 
@@ -296,6 +301,100 @@ namespace The_Mole_Backend.Models
             return edges;
         }
 
+        public List<List<string>> StartAGame(string categoryName)
+        {
+            List<List<string>> StartVerteciesAndPaths = new List<List<string>>();
+            string edgeCategoryName = "";
+            string verteciesCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    verteciesCategoryName = "NBAVertecies";
+                    break;
+                case "GENERALKNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    verteciesCategoryName = "GeneralVertecies";
+                    break;
+                case "MOVIES":
+                    edgeCategoryName = "MoviesEdges";
+                    verteciesCategoryName = "MoviesVertecies";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    verteciesCategoryName = "MusicVertecies";
+                    break;
+                case "CELEB":
+                    edgeCategoryName = "CelebEdges";
+                    verteciesCategoryName = "CelebVertecies";
+                    break;
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges and vertecies for the given category
+            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
+            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            //create a graph 
+            var graph = new WeightedDiGraph<string, int>();
+            //insert vertecies to the graph
+            foreach (string vertex in vertecies)
+            {
+                graph.AddVertex(vertex);
+            }
+            //insert edges to the graph
+            foreach (var edge in edges)
+            {
+                graph.AddEdge(edge[0], edge[1], 1);
+            }
+            //create dijkstra algorithm
+            var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
+            bool isDone = false;
+            while (!isDone)
+            {
+                int sourceVertex = random.Next(0, vertecies.Count);
+                int targetVertex = random.Next(0, vertecies.Count);
+                if (sourceVertex != targetVertex)
+                {
+                    
+                    List<string> pathsTwo = new List<string>();
+                    var result = algorithm.FindShortestPath(graph, vertecies[sourceVertex], vertecies[targetVertex]);
+                    var result1 = algorithm.FindShortestPath(graph, vertecies[targetVertex], vertecies[sourceVertex]);
+
+                    if (result.Path.Count == result1.Path.Count)
+                    {
+                        isDone = true;
+                        if (result.Path.Count == 1)
+                        {
+                            //pathsTwo.Add(vertecies[sourceVertex]);
+                            //pathsTwo.Add(vertecies[targetVertex]);
+                            //StartVerteciesAndPaths.Add(pathsTwo);
+                            //pathsTwo.Clear();
+                            //pathsTwo.Add(vertecies[targetVertex]);
+                            //pathsTwo.Add(vertecies[sourceVertex]);
+                            //StartVerteciesAndPaths.Add(pathsTwo);
+
+                            isDone = false;
+                        }
+                        else
+                        {
+                            StartVerteciesAndPaths.Add(result.Path);
+                            StartVerteciesAndPaths.Add(result1.Path);
+                        }
+                    }
+                    
+                    //if (result.Path.Count == 1)
+                    //{
+                    //    pathsTwo.Add(vertecies[sourceVertex]);
+                    //    pathsTwo.Add(vertecies[targetVertex]);
+                    //    Paths.Add(pathsTwo);
+                    //}
+                    //else Paths.Add(result.Path);
+
+                }
+            }
+            return StartVerteciesAndPaths;
+        }
 
     }
 

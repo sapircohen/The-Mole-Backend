@@ -29,7 +29,7 @@ namespace AdminPage.Controllers
             }
         }
         [HttpGet]
-        [Route("api/Player")]
+        [Route("api/PlayerGetToken")]
         public string GetToken(string uid)
         {
             try
@@ -61,13 +61,13 @@ namespace AdminPage.Controllers
 
         //insert token player
         [HttpPost]
-        [Route("api/player")]
-        public void Post(string token,string uid)
+        [Route("api/playerToken")]
+        public void PostToken([FromBody]Player p)
         {
             try
             {
-                Player p = new Player();
-                p.InsertToken(token, uid);
+                
+                p.InsertToken(p.Token, p.Uid);
             }
 
             catch (Exception ex)
@@ -76,32 +76,30 @@ namespace AdminPage.Controllers
             }
         }
 
+        ////insert avatar player
+        //[HttpPost]
+        //[Route("api/playerAvatar")]
+        //public void PostAvatar([FromBody] Player p )
+        //{
+        //    try
+        //    {
+        //        p.InsertAvatar(p., uid);
+        //    }
+
+        //    catch (Exception ex)
+        //    {
+        //        throw new Exception("בעיה בהכנסת הנתונים למערכת");
+        //    }
+        //}
+
         //insert avatar player
         [HttpPost]
-        [Route("api/player")]
-        public void PostAvatar(string avatarUrl, string uid)
+        [Route("api/playerLastLogin")]
+        public void PostLastLogin([FromBody] Player p )
         {
             try
             {
-                Player p = new Player();
-                p.InsertAvatar(avatarUrl, uid);
-            }
-
-            catch (Exception ex)
-            {
-                throw new Exception("בעיה בהכנסת הנתונים למערכת");
-            }
-        }
-
-        //insert avatar player
-        [HttpPost]
-        [Route("api/player")]
-        public void PostLastLogin(string uid)
-        {
-            try
-            {
-                Player p = new Player();
-                p.InsertLastLogin(uid);
+                p.InsertLastLogin(p.Uid);
             }
 
             catch (Exception ex)

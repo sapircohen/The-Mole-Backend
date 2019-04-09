@@ -38,6 +38,8 @@ namespace The_Mole_Backend.Models
             string root_path = HttpRuntime.AppDomainAppPath;
 
             ChromeDriver chromeDriver = new ChromeDriver(root_path + @"\Drivers", chromeOptions);
+
+
             chromeDriver.Navigate().GoToUrl(url);
             chromeDriver.FindElementByXPath("//*[@id='root']/div[2]/div/button").Click();
 
@@ -51,7 +53,9 @@ namespace The_Mole_Backend.Models
 
             chromeDriver.Close();
             chromeDriver.Dispose();
+
             int index = Array.IndexOf(paths, Target);
+
             List<string> newPath = new List<string>();
             for (int i = 0; i <= index; i++)
             {

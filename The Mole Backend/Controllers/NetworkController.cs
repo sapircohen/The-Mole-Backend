@@ -46,6 +46,24 @@ namespace The_Mole_Backend.Controllers
                 throw new Exception("problem with GetTwoPaths, the error: " + ex);
             }
         }
+        [HttpGet]
+        [Route("api/networkStartAGame")]
+        public IEnumerable<List<string>> StartAGame(string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<List<string>> StartPaths = new List<List<string>>();
+                StartPaths = mainAlgorithm.StartAGame(categoryName);
+
+                return StartPaths;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with GetTwoPaths, the error: " + ex);
+            }
+        }
 
         public string[] GetRandomVertecies(string categoryName)
         {
