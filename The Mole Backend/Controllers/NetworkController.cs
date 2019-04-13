@@ -61,10 +61,30 @@ namespace The_Mole_Backend.Controllers
             catch (Exception ex)
             {
 
-                throw new Exception("problem with GetTwoPaths, the error: " + ex);
+                throw new Exception("problem with StartAGame, the error: " + ex);
             }
         }
 
+        [HttpGet]
+        [Route("api/networkGetRandomVerteciesFromVertex")]
+        public List<string> GetRandomVerteciesFromVertex(string source, string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<string> moreVertecies = new List<string>();
+                moreVertecies = mainAlgorithm.getThreeMoreRandom(source,categoryName);
+
+                return moreVertecies;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with GetRandomVerteciesFromVertex, the error: " + ex);
+            }
+        }
+
+        //random vertecies from the same category
         public string[] GetRandomVertecies(string categoryName)
         {
             try

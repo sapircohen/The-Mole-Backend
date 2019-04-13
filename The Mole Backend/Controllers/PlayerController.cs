@@ -92,7 +92,7 @@ namespace AdminPage.Controllers
         //    }
         //}
 
-        //insert avatar player
+        //insert last login player
         [HttpPost]
         [Route("api/playerLastLogin")]
         public void PostLastLogin([FromBody] Player p )
@@ -107,6 +107,45 @@ namespace AdminPage.Controllers
                 throw new Exception("בעיה בהכנסת הנתונים למערכת");
             }
         }
+
+        // GET Todays Players: api/Player
+        [Route("api/PlayerToday")]
+        public int GetTodaysPlayers()
+        {
+            try
+            {
+                int numofPlayers;
+                Player p = new Player();
+                numofPlayers = p.TodaysPlayers();
+                return numofPlayers;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("GET Todays players error: ", ex);
+            }
+        }
+
+        // GET Todays Players: api/Player
+        [Route("api/PlayerThismonth")]
+        public int GetMonthPlayers()
+        {
+            try
+            {
+                int numofPlayers;
+                Player p = new Player();
+                numofPlayers = p.MonthPlayers();
+                return numofPlayers;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("GET Players error: ", ex);
+            }
+        }
+
+
+
         // GET: api/Player/5
         public string Get(int id)
         {

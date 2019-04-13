@@ -244,6 +244,9 @@
     <Content Include="HTML\forgot-password.html" />
     <Content Include="HTML\Games-Teble.html" />
     <Content Include="HTML\gulpfile.js" />
+    <Content Include="HTML\images\lior.gif" />
+    <Content Include="HTML\images\mor.gif" />
+    <Content Include="HTML\images\sapir.gif" />
     <Content Include="HTML\login.html" />
     <Content Include="HTML\templates\404.html" />
     <Content Include="HTML\templates\blank.html" />
@@ -257,7 +260,10 @@
     <Content Include="HTML\templates\utilities-other.html" />
     <Content Include="HTML\Users-Teble.html" />
     <Content Include="HTML\Vertecies in Games-Teble.html" />
+    <Content Include="img\lior.gif" />
     <Content Include="img\logo33-03.jpg" />
+    <Content Include="img\mor.gif" />
+    <Content Include="img\sapir.gif" />
     <Content Include="img\TheMoleLogo.JPG" />
     <Content Include="img\undraw_posting_photo.svg" />
     <Content Include="Pages\Testing.html" />
@@ -291,6 +297,7 @@
     <Content Include="HTML\package-lock.json" />
     <Content Include="HTML\package.json" />
     <Content Include="HTML\README.md" />
+    <Content Include="HTML\images\Thumbs.db" />
     <None Include="Properties\PublishProfiles\FolderProfile.pubxml" />
     <None Include="Scripts\jquery-3.3.1.intellisense.js" />
     <Content Include="Scripts\jquery-3.3.1.js" />

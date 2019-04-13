@@ -382,20 +382,69 @@ namespace The_Mole_Backend.Models
                             StartVerteciesAndPaths.Add(result1.Path);
                         }
                     }
-                    
-                    //if (result.Path.Count == 1)
-                    //{
-                    //    pathsTwo.Add(vertecies[sourceVertex]);
-                    //    pathsTwo.Add(vertecies[targetVertex]);
-                    //    Paths.Add(pathsTwo);
-                    //}
-                    //else Paths.Add(result.Path);
-
                 }
             }
+            List<string> edgesForFirstVertex = this.getThreeMoreRandom(StartVerteciesAndPaths[0][0], categoryName);
+            List<string> edgesForSecondVertex = this.getThreeMoreRandom(StartVerteciesAndPaths[1][0], categoryName);
+            StartVerteciesAndPaths.Add(edgesForFirstVertex);
+            StartVerteciesAndPaths.Add(edgesForSecondVertex);
+
             return StartVerteciesAndPaths;
         }
 
+        //
+        public List<string> getThreeMoreRandom(string source,string categoryName)
+        {
+            List<string> threeMoreRandom = new List<string>();
+            string edgeCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    break;
+                case "GENERALKNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "GENERAL KNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "MOVIES":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "FILMS":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    break;
+                case "CELEB":
+                    edgeCategoryName = "CelebEdges";
+                    break;
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges for the given category and source
+            List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
+
+            bool isListReady = false;
+            int counter = 0;
+            while (!isListReady)
+            {
+                
+                int edgeIndex = random.Next(0, edges.Count);
+                if (!threeMoreRandom.Contains(edges[edgeIndex]))
+                {
+                    threeMoreRandom.Add(edges[edgeIndex]);
+                    counter++;
+                }
+                if (counter == 3)
+                {
+                    isListReady = true;
+                }
+            }
+            return threeMoreRandom;
+        }
     }
 
     //helper for the algorithm

@@ -139,6 +139,22 @@ namespace AdminPage.Models
             return lp;
 
         }
+        //Count how many players signed up today
+        public int TodaysPlayers()
+        {
+            DBservices dbs = new DBservices();
+            List<Player> lp = dbs.TodaysPlayers("TheMoleConnection", "Player");
+            int numofPlayers = lp.Count();
+            return numofPlayers;
+        }
 
+        //Count how many players signed in this month
+        public int MonthPlayers()
+        {
+            DBservices dbs = new DBservices();
+            List<Player> lp = dbs.MonthPlayers("TheMoleConnection", "Player");
+            int numofPlayers = lp.Count();
+            return numofPlayers;
+        }
     }
 }

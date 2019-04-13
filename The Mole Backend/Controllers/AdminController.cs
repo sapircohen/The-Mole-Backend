@@ -16,10 +16,19 @@ namespace AdminPage.Controllers
             return new string[] { "value1", "value2" };
         }
 
-        // GET: api/Admin/5
-        public string Get(int id)
+        // GET: api/Admin/?Email = user.Email
+        public Admin Get(string email)
         {
-            return "value";
+            try
+            {
+                Admin a = new Admin();
+                return a.GetAdmin(email);
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("Get Admin error: ", ex);
+            }
         }
 
         // POST: api/Admin
@@ -49,7 +58,7 @@ namespace AdminPage.Controllers
             }
             catch (Exception ex)
             {
-                throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת");
+                throw new Exception("קרתה בעיה בעת כניסת המשתמש למערכת",ex);
             }
         }
     }
