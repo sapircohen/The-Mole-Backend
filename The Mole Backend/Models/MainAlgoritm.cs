@@ -438,7 +438,7 @@ namespace The_Mole_Backend.Models
                     threeMoreRandom.Add(edges[edgeIndex]);
                     counter++;
                 }
-                if (counter == 3)
+                if (counter == 2)
                 {
                     isListReady = true;
                 }
