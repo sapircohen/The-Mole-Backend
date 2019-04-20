@@ -249,6 +249,47 @@ public class DBservices
             }
         }
     }
+    public int insertWinOrLose(int win, int cashMole, string uid)
+    {
+        SqlConnection con;
+        SqlCommand cmd;
+
+        try
+        {
+            con = connect("TheMoleConnection"); // create the connection
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+
+        String pStr = "update Player set cashMole=" + cashMole + "+cashMole,numOfWinnings="+win+ "+numOfWinnings where uid = '" + uid + "'";    // helper method to build the insert string
+
+        cmd = CreateCommand(pStr, con);             // create the command
+
+        try
+        {
+            int numEffected = cmd.ExecuteNonQuery(); // execute the command
+            return numEffected;
+        }
+        catch (Exception ex)
+        {
+            return 0;
+            // write to log
+            throw (ex);
+        }
+
+        finally
+        {
+            if (con != null)
+            {
+                // close the db connection
+                con.Close();
+            }
+        }
+    }
+
     public int insertAvatar(string avatarUrl, string uid)
     {
         SqlConnection con;
@@ -344,8 +385,8 @@ public class DBservices
         string format = "yyyy-MM-dd HH:mm:ss";
         DateTime time = DateTime.Now;
         // use a string builder to create the dynamic string
-        sb.AppendFormat("Values('{0}', '{1}','{2}','{3}','{4}','{5}')", player.Email, player.NickName, time.ToString(format),player.Locale,player.ProfilePic,player.Uid);
-        String prefix = "INSERT INTO Player " + "(UserEmail, UserNickname,CreatedAt,Locale,profile_pic,uid) ";
+        sb.AppendFormat("Values('{0}', '{1}','{2}','{3}','{4}','{5}',{6},{7})", player.Email, player.NickName, time.ToString(format),player.Locale,player.ProfilePic,player.Uid,25,0);
+        String prefix = "INSERT INTO Player " + "(UserEmail, UserNickname,CreatedAt,Locale,profile_pic,uid,cashMole,numOfWinnings) ";
         command = prefix + sb.ToString();
 
         return command;
@@ -389,6 +430,56 @@ public class DBservices
         }
     }
 
+    public Player GetPlayer(string uid)
+    {
+        SqlConnection con = null;
+        Player p = new Player();
+        try
+        {
+            con = connect("TheMoleConnection");
+
+            String selectSTR = "SELECT * FROM Player where uid='"+uid+"'";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                p.NickName = dr["UserNickname"].ToString();
+                p.Email = dr["UserEmail"].ToString();
+                p.BirthDate = dr["birthDate"].ToString();
+                p.Gender = dr["gender"].ToString();
+                
+                if (dr["numOfWinnings"].ToString() == "")
+                {
+                    p.NumOfWinnings = 0;
+                }
+                else p.NumOfWinnings = int.Parse(dr["numOfWinnings"].ToString());
+
+                if (dr["cashMole"].ToString() == "")
+                {
+                    p.CashMole = 250;
+                }
+                else p.CashMole = int.Parse(dr["CashMole"].ToString());
+
+            }
+
+            return p;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
     //---------------------------------------------------------------------------------
     // Read Players from the DB into a list - dataReader withOut Filter
     //---------------------------------------------------------------------------------

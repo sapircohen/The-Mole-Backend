@@ -212,17 +212,28 @@ namespace The_Mole_Backend.Models
             var algorithm = new DijikstraShortestPath<string, int>(new DijikstraShortestPathOperators());
 
             List<string> pathsTwo = new List<string>();
-            var result = algorithm.FindShortestPath(graph,source,target);
-            if (result.Path.Count == 1)
+            try
             {
-                pathsTwo.Add(source);
-                pathsTwo.Add(target);
-                TwoPaths.Add(pathsTwo);
+                var result = algorithm.FindShortestPath(graph, source, target);
+                if (result.Path.Count == 1)
+                {
+                    pathsTwo.Add(source);
+                    pathsTwo.Add(target);
+                    TwoPaths.Add(pathsTwo);
+                }
+
+                else TwoPaths.Add(result.Path);
+                TwoPaths.Add(getThreeMoreRandom(source, categoryName));
             }
-
-            else TwoPaths.Add(result.Path);
-
+            catch (Exception ex)
+            {
+                List<string> NF = new List<string>();
+                NF.Add("not found");
+                TwoPaths.Add(NF);
+                return TwoPaths;
+            }
             return TwoPaths;
+
         }
 
         /// <summary>

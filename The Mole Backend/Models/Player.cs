@@ -110,6 +110,19 @@ namespace AdminPage.Models
             string token = db.getToken(uid);
             return token;
         }
+        //set cash + winnings after a win or losing
+        public void SetCashAndWin(int win,int cashMole,string uid)
+        {
+            DBservices db = new DBservices();
+            db.insertWinOrLose(win, cashMole, uid);
+        }
+        public Player getPlayer(string uid)
+        {
+            DBservices db = new DBservices();
+
+            return db.GetPlayer(uid);
+        }
+
         public int InsertToken(string token,string uid)
         {
             DBservices db = new DBservices();

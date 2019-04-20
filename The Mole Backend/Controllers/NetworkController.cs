@@ -29,7 +29,8 @@ namespace The_Mole_Backend.Controllers
             }
             
         }
-
+        [HttpGet]
+        [Route("api/networkGetPath")]
         public IEnumerable<List<string>> GetPaths(string source,string target,string categoryName)
         {
             try
