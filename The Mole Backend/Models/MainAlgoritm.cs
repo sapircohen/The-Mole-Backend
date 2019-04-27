@@ -171,11 +171,11 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "NBAEdges";
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     edgeCategoryName = "MoviesEdges";
                     verteciesCategoryName = "MoviesVertecies";
                     break;
@@ -183,10 +183,15 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "MusicEdges";
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
@@ -250,18 +255,22 @@ namespace The_Mole_Backend.Models
                 case "NBA":
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     verteciesCategoryName = "MoviesVertecies";
                     break;
                 case "MUSIC":
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
@@ -323,11 +332,11 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "NBAEdges";
                     verteciesCategoryName = "NBAVertecies";
                     break;
-                case "GENERALKNOWLEDGE":
+                case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
                     verteciesCategoryName = "GeneralVertecies";
                     break;
-                case "MOVIES":
+                case "FILMS":
                     edgeCategoryName = "MoviesEdges";
                     verteciesCategoryName = "MoviesVertecies";
                     break;
@@ -335,10 +344,15 @@ namespace The_Mole_Backend.Models
                     edgeCategoryName = "MusicEdges";
                     verteciesCategoryName = "MusicVertecies";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     verteciesCategoryName = "CelebVertecies";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    verteciesCategoryName = "PoliticiansVertecies";
+                    break;
+
                 default:
                     break;
             }
@@ -403,7 +417,12 @@ namespace The_Mole_Backend.Models
             return StartVerteciesAndPaths;
         }
 
-        //
+        /// <summary>
+        /// Get Two (+Source = Three) random vertecies to choose from in the game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
         public List<string> getThreeMoreRandom(string source,string categoryName)
         {
             List<string> threeMoreRandom = new List<string>();
@@ -413,14 +432,8 @@ namespace The_Mole_Backend.Models
                 case "NBA":
                     edgeCategoryName = "NBAEdges";
                     break;
-                case "GENERALKNOWLEDGE":
-                    edgeCategoryName = "GeneralEdges";
-                    break;
                 case "GENERAL KNOWLEDGE":
                     edgeCategoryName = "GeneralEdges";
-                    break;
-                case "MOVIES":
-                    edgeCategoryName = "MoviesEdges";
                     break;
                 case "FILMS":
                     edgeCategoryName = "MoviesEdges";
@@ -428,9 +441,13 @@ namespace The_Mole_Backend.Models
                 case "MUSIC":
                     edgeCategoryName = "MusicEdges";
                     break;
-                case "CELEB":
+                case "CELEBRITY":
                     edgeCategoryName = "CelebEdges";
                     break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    break;
+
                 default:
                     break;
             }
@@ -444,7 +461,7 @@ namespace The_Mole_Backend.Models
             {
                 
                 int edgeIndex = random.Next(0, edges.Count);
-                if (!threeMoreRandom.Contains(edges[edgeIndex]))
+                if (!threeMoreRandom.Contains(edges[edgeIndex]) && edges[edgeIndex] != source)
                 {
                     threeMoreRandom.Add(edges[edgeIndex]);
                     counter++;
@@ -456,6 +473,64 @@ namespace The_Mole_Backend.Models
             }
             return threeMoreRandom;
         }
+
+        /// <summary>
+        /// Get Three (+Source = Four) random vertecies to choose from in the game
+        /// </summary>
+        /// <param name="source"></param>
+        /// <param name="categoryName"></param>
+        /// <returns></returns>
+        public List<string> getFourMoreRandom(string source, string categoryName)
+        {
+            List<string> threeMoreRandom = new List<string>();
+            string edgeCategoryName = "";
+            switch (categoryName.ToUpper())
+            {
+                case "NBA":
+                    edgeCategoryName = "NBAEdges";
+                    break;
+                case "GENERAL KNOWLEDGE":
+                    edgeCategoryName = "GeneralEdges";
+                    break;
+                case "FILMS":
+                    edgeCategoryName = "MoviesEdges";
+                    break;
+                case "MUSIC":
+                    edgeCategoryName = "MusicEdges";
+                    break;
+                case "CELEBRITY":
+                    edgeCategoryName = "CelebEdges";
+                    break;
+                case "POLITICS":
+                    edgeCategoryName = "PoliticiansEdges";
+                    break;
+
+                default:
+                    break;
+            }
+            DBservices db = new DBservices();
+            //get edges for the given category and source
+            List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
+
+            bool isListReady = false;
+            int counter = 0;
+            while (!isListReady)
+            {
+
+                int edgeIndex = random.Next(0, edges.Count);
+                if (!threeMoreRandom.Contains(edges[edgeIndex]) && edges[edgeIndex]!=source)
+                {
+                    threeMoreRandom.Add(edges[edgeIndex]);
+                    counter++;
+                }
+                if (counter == 3)
+                {
+                    isListReady = true;
+                }
+            }
+            return threeMoreRandom;
+        }
+
     }
 
     //helper for the algorithm

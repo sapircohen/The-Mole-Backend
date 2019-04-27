@@ -1,11 +1,14 @@
 ﻿<!DOCTYPE html>
 <html>
 <head>
+    
     <meta charset="utf-8" />
     <title>Network testing</title>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
     <script>
+        //1. create a leader board screen and methods
+        //2. create a change avatar screen and methods 
         $(document).ready(function () {
             let today = new Date().toISOString();
             var p = {
@@ -23,13 +26,13 @@
             //ajaxCall("POST", "../api/Player", JSON.stringify(p), success, error);
             //ajaxCall("POST", "../api/PlayerToken", JSON.stringify(p1), success, error);
             //ajaxCall("POST", "../api/playerWinOrLose?win=1&cashMole=25&uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
-            ajaxCall("GET", "../api/playerGetPlayer?uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
+            //ajaxCall("GET", "../api/playerGetPlayer?uid=0GMoIlsa3Sf75fYLEHxL4occobI2", "", success, error);
             //ajaxCall("POST", "../api/Player?avatarUrl=netta&uid=sapir", "", success, error);
             //ajaxCall("POST", "../api/Player?uid=sapir", "", success, error);
             //var uid = "something else";
             //ajaxCall("Get", "../api/Player/?uid=" + uid, "", success, error);
-            //ajaxCall("Get", "../api/networkStartAGame/?categoryName=NBA", "", success, error);
-           // ajaxCall("Get", "../api/networkGetRandomVerteciesFromVertex/?source=Lebron James&categoryName=NBA", "", success, error);
+            //ajaxCall("Get", "../api/networkStartAGame/?categoryName=CELEBRITY", "", success, error);
+            //ajaxCall("Get", "../api/networkGetRandomVerteciesFromVertex/?source=Lebron James&categoryName=NBA", "", success, error);
             //randomVertecies();
             //Path();
             //randomPaths();

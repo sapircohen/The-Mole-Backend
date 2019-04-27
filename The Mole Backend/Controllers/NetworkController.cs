@@ -85,6 +85,25 @@ namespace The_Mole_Backend.Controllers
             }
         }
 
+        [HttpGet]
+        [Route("api/networkGetRandomVerteciesFromVertex3")]
+        public List<string> GetRandomVerteciesFromVertex3(string source, string categoryName)
+        {
+            try
+            {
+                MainAlgorithm mainAlgorithm = new MainAlgorithm();
+                List<string> moreVertecies = new List<string>();
+                moreVertecies = mainAlgorithm.getFourMoreRandom(source, categoryName);
+
+                return moreVertecies;
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("problem with networkGetRandomVerteciesFromVertex3, the error: " + ex);
+            }
+        }
+
         //random vertecies from the same category
         public string[] GetRandomVertecies(string categoryName)
         {
