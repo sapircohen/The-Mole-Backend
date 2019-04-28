@@ -107,21 +107,22 @@ namespace AdminPage.Controllers
                 throw new Exception("GET PLAYER ERROR "+ex.Message);
             }
         }
-        ////insert avatar player
-        //[HttpPost]
-        //[Route("api/playerAvatar")]
-        //public void PostAvatar([FromBody] Player p )
-        //{
-        //    try
-        //    {
-        //        p.InsertAvatar(p., uid);
-        //    }
+        //insert avatar player
+        [HttpPost]
+        [Route("api/playerAvatar")]
+        public void PostAvatar(string avatarUrl,string uid)
+        {
+            try
+            {
+                Player p = new Player();
+                p.InsertAvatar(avatarUrl, uid);
+            }
 
-        //    catch (Exception ex)
-        //    {
-        //        throw new Exception("בעיה בהכנסת הנתונים למערכת");
-        //    }
-        //}
+            catch (Exception ex)
+            {
+                throw new Exception("בעיה בהכנסת הנתונים למערכת");
+            }
+        }
 
         //insert last login player
         [HttpPost]
@@ -175,7 +176,24 @@ namespace AdminPage.Controllers
             }
         }
 
+        // GET: api
+        [HttpGet]
+        [Route("api/PlayerWinners")]
+        public IEnumerable<Player> GetWinners()
+        {
+            try
+            {
+                List<Player> playerList = new List<Player>();
+                Player p = new Player();
+                playerList = p.ReadWinners();
+                return playerList;
+            }
+            catch (Exception ex)
+            {
 
+                throw new Exception("בעיה בקריאת נתוני הנצחונות מהמערכת");
+            }
+        }
 
         // GET: api/Player/5
         public string Get(int id)

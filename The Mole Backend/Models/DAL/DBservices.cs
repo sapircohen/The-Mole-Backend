@@ -54,7 +54,49 @@ public class DBservices
 
         return cmd;
     }
+    //---------------------------------------------------------------------------------
+    // Read winners from the DB into a list - dataReader withOut Filter
+    //---------------------------------------------------------------------------------
+    public List<Player> GetWinners(string conString)
+    {
 
+        SqlConnection con = null;
+        List<Player> lp = new List<Player>();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "select top 25 UserNickname,numOfWinnings,UserEmail,profile_pic from Player group by numOfWinnings,UserNickname,UserEmail,profile_pic order by numOfWinnings DESC";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                Player p = new Player();
+                p.NickName = (string)dr["UserNickname"];
+                p.Email = (string)dr["UserEmail"];
+                p.NumOfWinnings = (Int32)dr["numOfWinnings"];
+                p.ProfilePic = (string)dr["profile_pic"];
+                lp.Add(p);
+            }
+
+            return lp;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
     public List<List<string>> GetEdges(string conString, string tableName)
     {
         SqlConnection con = null;
@@ -305,7 +347,7 @@ public class DBservices
             throw (ex);
         }
 
-        String pStr = "update Player set avatar_pic ='" + avatarUrl + "' where uid = '" + uid + "'";    // helper method to build the insert string
+        String pStr = "update Player set profile_pic ='" + avatarUrl + "' where uid = '" + uid + "'";    // helper method to build the insert string
 
         cmd = CreateCommand(pStr, con);             // create the command
 
@@ -446,6 +488,7 @@ public class DBservices
 
             while (dr.Read())
             {   // Read till the end of the data into a row
+                p.ProfilePic = dr["profile_pic"].ToString();
                 p.NickName = dr["UserNickname"].ToString();
                 p.Email = dr["UserEmail"].ToString();
                 p.BirthDate = dr["birthDate"].ToString();

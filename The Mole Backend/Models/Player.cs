@@ -134,7 +134,7 @@ namespace AdminPage.Models
         {
             DBservices db = new DBservices();
 
-            int rowAffected = db.insertToken(token, uid);
+            int rowAffected = db.insertAvatar(avatarUrl, uid);
             return rowAffected;
         }
         //InsertLastLogin
@@ -168,6 +168,14 @@ namespace AdminPage.Models
             List<Player> lp = dbs.MonthPlayers("TheMoleConnection", "Player");
             int numofPlayers = lp.Count();
             return numofPlayers;
+        }
+
+        //read winners
+        public List<Player> ReadWinners()
+        {
+            DBservices dbs = new DBservices();
+            List<Player> lp = dbs.GetWinners("TheMoleConnection");
+            return lp;
         }
     }
 }
