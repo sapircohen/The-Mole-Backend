@@ -27,6 +27,207 @@
     <script src="../Scripts/jquery-3.3.1.min.js"></script>
     <script src="../Scripts/ajaxCalls.js"></script>
 
+    <script src="https://www.gstatic.com/firebasejs/5.11.1/firebase.js"></script>
+
+    <script>
+        $('#wait').show();
+        var FirebaseConfig = {
+            apiKey: "AIzaSyDTU4WcRf0sfYP77eeulY4BBtTcWG2tI68",
+            authDomain: "the-mole-230111.firebaseapp.com",
+            databaseURL: "https://the-mole-230111.firebaseio.com",
+            projectId: "the-mole-230111",
+            storageBucket: "the-mole-230111.appspot.com",
+            messagingSenderId: "625987979169"
+        }
+        firebase.initializeApp(FirebaseConfig);
+
+        var counter = 0;
+        var celebcounter = 0;
+        var nbacounter = 0;
+        var filmcounter = 0;
+        var gkcounter = 0;
+        var musicounter = 0;
+        var policounter = 0;
+
+        //getting all games who created this month from Firebase and highest category
+        $(document).ready(function () {
+            var categories = ["CELEBRITY", "FILMS", "GENERAL KNOWLEDGE", "MUSIC", "NBA", "POLITICS"];
+            for (var i = 0; i < categories.length; i++) {
+                let ref = firebase.database().ref("/theMole" + categories[i]);
+                ref.on("child_added", function (snapshot) {
+
+                    var d = '';
+                    if (snapshot.val().Date !== undefined) {
+                        d = snapshot.val().Date;
+                        var datearray = d.split("/");
+                        var newd = datearray[1] + '/' + datearray[0] + '/' + datearray[2];
+
+                        var today = new Date();
+
+                        var d2 = Date.parse(newd);
+                        var d3 = new Date(d2);
+
+                        var diffTime = Math.abs(today.getTime() - d3.getTime());
+                        var diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+                        if (diffDays <= 30) {
+                            counter++;
+                        }
+
+                        var category = snapshot.val().category
+                        switch (category) {
+                            case "CELEBRITY": celebcounter++;
+                                break;
+                            case "FILMS": filmcounter++;
+                                break;
+                            case "GENERAL KNOWLEDGE": gkcounter++;
+                                break;
+                            case "MUSIC": musicounter++;
+                                break;
+                            case "NBA": nbacounter++;
+                                break;
+                            case "POLITICS": policounter++;
+                                break;
+                        }
+                    }
+                    
+                    $("#MonthGames").html(counter);
+                    $('#wait').hide();
+
+                    var myCanvas = document.getElementById("myCanvas");
+                    myCanvas.width = 225;
+                    myCanvas.height = 225;
+
+                    var ctx = myCanvas.getContext("2d");
+                    function drawLine(ctx, startX, startY, endX, endY) {
+                        ctx.beginPath();
+                        ctx.moveTo(startX, startY);
+                        ctx.lineTo(endX, endY);
+                        ctx.stroke();
+                    }
+                    function drawArc(ctx, centerX, centerY, radius, startAngle, endAngle) {
+                        ctx.beginPath();
+                        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                        ctx.stroke();
+                    }
+                    function drawPieSlice(ctx, centerX, centerY, radius, startAngle, endAngle, color) {
+                        ctx.fillStyle = color;
+                        ctx.beginPath();
+                        ctx.moveTo(centerX, centerY);
+                        ctx.arc(centerX, centerY, radius, startAngle, endAngle);
+                        ctx.closePath();
+                        ctx.fill();
+                    }
+
+                    var myVinyls = {
+                        "Celebrity": celebcounter,
+                        "Movies": filmcounter,
+                        "General Knowledge": gkcounter,
+                        "Music": musicounter,
+                        "NBA": nbacounter,
+                        "Politics": policounter
+                    };
+
+                    var Piechart = function (options) {
+                        this.options = options;
+                        this.canvas = options.canvas;
+                        this.ctx = this.canvas.getContext("2d");
+                        this.colors = options.colors;
+
+                        this.draw = function () {
+                            var total_value = 0;
+                            var color_index = 0;
+                            for (var categ in this.options.data) {
+                                var val = this.options.data[categ];
+                                total_value += val;
+                            }
+
+                            var start_angle = 0;
+                            for (categ in this.options.data) {
+                                val = this.options.data[categ];
+                                var slice_angle = 2 * Math.PI * val / total_value;
+
+                                drawPieSlice(
+                                    this.ctx,
+                                    this.canvas.width / 2,
+                                    this.canvas.height / 2,
+                                    Math.min(this.canvas.width / 2, this.canvas.height / 2),
+                                    start_angle,
+                                    start_angle + slice_angle,
+                                    this.colors[color_index % this.colors.length]
+                                );
+
+                                start_angle += slice_angle;
+                                color_index++;
+                            }
+
+                            //drawing a white circle over the chart
+                            //to create the doughnut chart
+                            if (this.options.doughnutHoleSize) {
+                                drawPieSlice(
+                                    this.ctx,
+                                    this.canvas.width / 2,
+                                    this.canvas.height / 2,
+                                    this.options.doughnutHoleSize * Math.min(this.canvas.width / 2, this.canvas.height / 2),
+                                    0,
+                                    2 * Math.PI,
+                                    "#ffffff"
+                                );
+                            }
+
+                            start_angle = 0;
+                            for (categ in this.options.data) {
+                                val = this.options.data[categ];
+                                slice_angle = 2 * Math.PI * val / total_value;
+                                var pieRadius = Math.min(this.canvas.width / 2, this.canvas.height / 2);
+                                var labelX = this.canvas.width / 2 + (pieRadius / 2) * Math.cos(start_angle + slice_angle / 2);
+                                var labelY = this.canvas.height / 2 + (pieRadius / 2) * Math.sin(start_angle + slice_angle / 2);
+
+                                if (this.options.doughnutHoleSize) {
+                                    var offset = (pieRadius * this.options.doughnutHoleSize) / 2;
+                                    labelX = this.canvas.width / 2 + (offset + pieRadius / 2) * Math.cos(start_angle + slice_angle / 2);
+                                    labelY = this.canvas.height / 2 + (offset + pieRadius / 2) * Math.sin(start_angle + slice_angle / 2);
+                                }
+
+                                var labelText = Math.round(100 * val / total_value);
+                                this.ctx.fillStyle = "#5a5c69";
+                                this.ctx.font = "bold 15px Nunito";
+                                this.ctx.fillText(labelText + "%", labelX, labelY);
+                                this.ctx.textAlign = "center";
+                                start_angle += slice_angle;
+                            }
+
+                            if (this.options.legend) {
+                                color_index = 0;
+                                var legendHTML = "";
+                                for (categ in this.options.data) {
+                                    legendHTML += "<span style='margin-left:10px'><i style='display:inline-block;width:20px;background-color:" + this.colors[color_index++] + ";'>&nbsp;</i> " + categ + "</span>";
+                                }
+                                this.options.legend.innerHTML = legendHTML;
+                            }
+                        }
+                    }
+
+                    var myLegend = document.getElementById("myLegend");
+
+                    var myDougnutChart = new Piechart(
+                        {
+                            canvas: myCanvas,
+                            data: myVinyls,
+                            colors: ["#CC9A8F", "#CDDCAC", "#FDE5CC", "#E9C6AB", "#FFE6B2", "#A2C7A7"],
+                            doughnutHoleSize: 0.5,
+                            legend: myLegend
+                        }
+                    );
+                    myDougnutChart.draw();
+
+
+                })
+            }
+
+        });
+    </script>
+
     <script>
         $(document).ready(function () {
             //getting all users who logged today
@@ -35,12 +236,12 @@
             //getting all users who created this month
             ajaxCall("GET", "../api/PlayerThismonth", "", getSuccess2, error2);
 
-            //getting all games who created this month
-            ajaxCall("GET", "../api/GamesThismonth", "", getSuccess3, error3);
-
             //getting Admin's NickName & Pic
             var user = JSON.parse(localStorage.getItem("user"));
             ajaxCall("GET", "../api/Admin/?Email=" + user.Email, "", getSuccessAdmin, errorAdmin);
+
+            //getting Player Of the Game
+            ajaxCall("GET", "../api/PlayerOfTheGame", "", getSuccess3, error3);
         });
 
         function getSuccess1(num) {
@@ -66,18 +267,6 @@
             console.log(error);
         }
 
-
-        function getSuccess3(num) {
-            try {
-                $("#MonthGames").html(num);
-            } catch (er) {
-                swal("", er, "warning");
-            }
-        }
-        function error3(error) {
-            console.log(error);
-        }
-
         function getSuccessAdmin(admin) {
             try {
                 $("#AdminName").html(admin.NickName);
@@ -90,7 +279,24 @@
         function errorAdmin(error) {
             console.log(error);
         }
+
+        function getSuccess3(player) {
+            try {
+                $("#nickName").html(player.NickName);
+                $("#profilepic").attr('src', player.ProfilePic);
+                $("#numofWins").html(player.NumOfWinnings);
+            } catch (e) {
+                console.log(e);
+            }
+        }
+        function error3(error) {
+            console.log(error);
+        }
+
     </script>
+
+
+
 
 </head>
 
@@ -134,7 +340,7 @@
                 </nav>
                 <!-- End of Topbar -->
                 <!-- Begin Page Content -->
-                <div class="container-fluid">
+                <div class="container-fluid" style="background-image: url(https://securestrux.com/content/uploads/2014/02/network_blue_opacity_lighter.png)">
 
                     <!-- Page Heading -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-4">
@@ -144,7 +350,7 @@
                     <!-- Content Row -->
                     <div class="row align-items-center justify-content-center">
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- Players online (Dayly) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-primary shadow h-100 py-2">
                                 <div class="card-body">
@@ -162,7 +368,7 @@
                             </div>
                         </div>
 
-                        <!-- Earnings (Monthly) Card Example -->
+                        <!-- New Users (Monthly) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-success shadow h-100 py-2">
                                 <div class="card-body">
@@ -180,7 +386,7 @@
                             </div>
                         </div>
 
-                        <!-- Pending Requests Card Example -->
+                        <!-- Games (Monthly) -->
                         <div class="col-xl-3 col-md-6 mb-4">
                             <div class="card border-left-warning shadow h-100 py-2">
                                 <div class="card-body">
@@ -201,65 +407,35 @@
 
                     <!-- Content Row -->
 
-                    <div class="row">
+                    <div id="wait" style="display:none;width:69px;height:89px;position:absolute;top:50%;left:40%;">
+                        <img src="../img/index.curved-bar-spinner.gif" width="64" height="64" />
+                    </div>
 
-                        <!-- Area Chart -->
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Active Daily Players</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-area">
-                                        <canvas id="myAreaChart"></canvas>
-                                    </div>
-                                </div>
+                    <div class="row align-items-center justify-content-center">
+
+                        <!-- Player of the game -->
+                        <div class="card shadow mb-4" style="height:364px">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Player of the game</h6>
+                            </div>
+                            <div class="card-body">
+                                <h6 id="nickName"></h6>
+                                <img id="profilepic" style="height:150px">
+                                <h6 id="numofWins" style="font-size:25px"></h6><h6>Wins</h6>
                             </div>
                         </div>
-
-                        <!-- Pie Chart -->
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="card shadow mb-4">
-                                <!-- Card Header - Dropdown -->
-                                <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
-                                    <h6 class="m-0 font-weight-bold text-primary">Top Categories</h6>
-                                    <div class="dropdown no-arrow">
-                                        <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            <i class="fas fa-ellipsis-v fa-sm fa-fw text-gray-400"></i>
-                                        </a>
-                                    </div>
-                                </div>
-                                <!-- Card Body -->
-                                <div class="card-body">
-                                    <div class="chart-pie pt-4 pb-2">
-                                        <canvas id="myPieChart"></canvas>
-                                    </div>
-                                    <div class="mt-4 text-center small">
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-primary"></i> NBA
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-success"></i> Movies
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Celebrities
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Politikies
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> Music
-                                        </span>
-                                        <span class="mr-2">
-                                            <i class="fas fa-circle text-info"></i> General Knowledge
-                                        </span>
+                        <div class="col-auto">
+                            <i class="fas fa-comments fa-2x text-gray-300"></i>
+                        </div>
+                        <!-- Category of the game -->
+                        <div class="card shadow mb-4">
+                            <div class="card-header py-3">
+                                <h6 class="m-0 font-weight-bold text-primary">Categories Pie Chart</h6>
+                            </div>
+                            <div class="card-body">
+                                <canvas id="myCanvas" style="margin-left:140px"></canvas>
+                                <div class="mt-4 text-center small">
+                                    <div id="myLegend">
                                     </div>
                                 </div>
                             </div>
@@ -308,7 +484,7 @@
                         swal({
                             title: 'Select data to retrieve',
                             input: 'select',
-                            inputOptions: { 'Users': 'Users', 'Games': 'Games', 'Vertecies in Games': 'Vertecies in Games' },
+                            inputOptions: { 'Users': 'Users', 'Game Won': 'Game Won' },
                             inputPlaceholder: 'required',
                             showCancelButton: true,
                             inputValidator: function (value) {

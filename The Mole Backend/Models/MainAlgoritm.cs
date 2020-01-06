@@ -12,7 +12,9 @@ namespace The_Mole_Backend.Models
         public string Source { get; set; }
         public string Source2 { get; set; }
         public string Target { get; set; }
+        
         static Random random = new Random();
+
         
         public MainAlgorithm(string source, string target)
         {
@@ -162,6 +164,9 @@ namespace The_Mole_Backend.Models
         /// <returns></returns>
         public List<List<string>> GetPath(string source, string target,string categoryName)
         {
+            //get all vertecies and edges from db
+            DBservices db = new DBservices();
+
             List<List<string>> TwoPaths = new List<List<string>>();
             string edgeCategoryName = "";
             string verteciesCategoryName = "";
@@ -196,11 +201,21 @@ namespace The_Mole_Backend.Models
                     break;
             }
             List<string> path = new List<string>();
-            //get all vertecies and edges from db
-            DBservices db = new DBservices();
+
+
             //get edges and vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
-            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            List<string> vertecies = new List<string>();
+            List<List<string>> edges = new List<List<string>>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            if (HttpContext.Current.Application[edgeCategoryName] != null)
+            {
+                edges = HttpContext.Current.Application[edgeCategoryName] as List<List<string>>;
+            }
+            else edges = db.GetEdges( "TheMoleConnection", edgeCategoryName);
             //create a graph 
             var graph = new WeightedDiGraph<string, int>();
             //insert vertecies to the graph
@@ -232,9 +247,8 @@ namespace The_Mole_Backend.Models
             }
             catch (Exception ex)
             {
-                List<string> NF = new List<string>();
-                NF.Add("not found");
-                TwoPaths.Add(NF);
+
+               // TwoPaths.Add(getThreeMoreRandom(source, categoryName));
                 return TwoPaths;
             }
             return TwoPaths;
@@ -277,7 +291,14 @@ namespace The_Mole_Backend.Models
             //get all vertecies and edges from db
             DBservices db = new DBservices();
             //get vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
+            //get edges and vertecies for the given category
+            List<string> vertecies = new List<string>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            
             //get six  random articles from vertecies list in a category
             for (int i = 0; i < 6; i++)
             {
@@ -358,8 +379,18 @@ namespace The_Mole_Backend.Models
             }
             DBservices db = new DBservices();
             //get edges and vertecies for the given category
-            List<string> vertecies = this.GetVerteciesForCategory("TheMoleConnection", verteciesCategoryName);
-            List<List<string>> edges = this.GetEdgesForCategory("TheMoleConnection", edgeCategoryName);
+            List<string> vertecies = new List<string>();
+            List<List<string>> edges = new List<List<string>>();
+            if (HttpContext.Current.Application[verteciesCategoryName] != null)
+            {
+                vertecies = HttpContext.Current.Application[verteciesCategoryName] as List<string>;
+            }
+            else vertecies = db.GetAllVertecies("TheMoleConnection", verteciesCategoryName);
+            if (HttpContext.Current.Application[edgeCategoryName] != null)
+            {
+                edges = HttpContext.Current.Application[edgeCategoryName] as List<List<string>>;
+            }
+            else edges = db.GetEdges("TheMoleConnection", edgeCategoryName);
             //create a graph 
             var graph = new WeightedDiGraph<string, int>();
             //insert vertecies to the graph
@@ -453,20 +484,32 @@ namespace The_Mole_Backend.Models
             }
             DBservices db = new DBservices();
             //get edges for the given category and source
+
             List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
 
             bool isListReady = false;
             int counter = 0;
+            int index = 2;
             while (!isListReady)
             {
-                
+                if (edges.Count ==0)
+                {
+                    return threeMoreRandom;
+                }
+                if (edges.Count == 1)
+                {
+                    threeMoreRandom.Add(edges[0]);
+                    return threeMoreRandom;
+                }
+
                 int edgeIndex = random.Next(0, edges.Count);
+                
                 if (!threeMoreRandom.Contains(edges[edgeIndex]) && edges[edgeIndex] != source)
                 {
                     threeMoreRandom.Add(edges[edgeIndex]);
                     counter++;
                 }
-                if (counter == 2)
+                if (counter == index)
                 {
                     isListReady = true;
                 }
@@ -511,7 +554,10 @@ namespace The_Mole_Backend.Models
             DBservices db = new DBservices();
             //get edges for the given category and source
             List<string> edges = db.GetEdgesForCategoryAndSource("TheMoleConnection", edgeCategoryName, source);
-
+            if (edges.Count == 0 || edges.Count == 1 || edges.Count == 2)
+            {
+                return threeMoreRandom;
+            }
             bool isListReady = false;
             int counter = 0;
             while (!isListReady)

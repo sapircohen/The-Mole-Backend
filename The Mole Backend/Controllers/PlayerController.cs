@@ -195,6 +195,23 @@ namespace AdminPage.Controllers
             }
         }
 
+        // GET: api/PlayerOfTheGame
+        [HttpGet]
+        [Route("api/PlayerOfTheGame")]
+        public Player PlayerOfTheGame()
+        {
+            try
+            {
+                Player p = new Player();
+                return p.PlayerOfTheGame();
+            }
+            catch (Exception ex)
+            {
+
+                throw new Exception("GET player error: ", ex);
+            }
+        }
+
         // GET: api/Player/5
         public string Get(int id)
         {

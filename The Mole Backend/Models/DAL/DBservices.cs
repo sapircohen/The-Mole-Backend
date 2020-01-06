@@ -865,5 +865,48 @@ public class DBservices
         }
     }
 
+    //---------------------------------------------------------------------------------
+    // Read Players with highest num of wins from the DB into a list - dataReader with Filter
+    //---------------------------------------------------------------------------------
+
+    public Player PlayerOfTheGame(string conString, string tableName)
+    {
+
+        SqlConnection con = null;
+        Player p = new Player();
+        try
+        {
+            con = connect(conString); // create a connection to the database using the connection String defined in the web config file
+
+            String selectSTR = "SELECT * FROM " + tableName + "  WHERE numOfWinnings = (Select Max(numOfWinnings) From Player)";
+            SqlCommand cmd = new SqlCommand(selectSTR, con);
+
+            // get a reader
+            SqlDataReader dr = cmd.ExecuteReader(CommandBehavior.CloseConnection); // CommandBehavior.CloseConnection: the connection will be closed after reading has reached the end
+
+            while (dr.Read())
+            {   // Read till the end of the data into a row
+                p.NickName = dr["UserNickname"].ToString();
+                p.NumOfWinnings = (Int32)dr["numOfWinnings"];
+                p.ProfilePic = dr["profile_pic"].ToString();
+            }
+
+            return p;
+        }
+        catch (Exception ex)
+        {
+            // write to log
+            throw (ex);
+        }
+        finally
+        {
+            if (con != null)
+            {
+                con.Close();
+            }
+        }
+    }
+
+
 
 }

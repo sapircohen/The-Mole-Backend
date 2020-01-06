@@ -177,5 +177,13 @@ namespace AdminPage.Models
             List<Player> lp = dbs.GetWinners("TheMoleConnection");
             return lp;
         }
+
+        //Read Player og the game
+        public Player PlayerOfTheGame()
+        {
+            DBservices dbs = new DBservices();
+            Player p = dbs.PlayerOfTheGame("TheMoleConnection", "Player");
+            return p;
+        }
     }
 }
